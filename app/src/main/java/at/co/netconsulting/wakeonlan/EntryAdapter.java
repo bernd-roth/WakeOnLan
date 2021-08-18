@@ -10,7 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import at.co.netconsulting.wakeonlan.general.BaseActivity;
+import at.co.netconsulting.wakeonlan.poj.EntryPoj;
 
 /**
  * Adapts EntryPoj objects onto views for lists
@@ -34,18 +34,14 @@ public final class EntryAdapter extends ArrayAdapter<EntryPoj> {
 		final EntryPoj entry = getItem(position);
 		
 		// Setting the title view is straightforward
-		viewHolder.titleView.setText(entry.getTitle());
-		
-		// Setting the subTitle view requires a tiny bit of formatting
-		final String formattedSubTitle = String.format("By %s on %s", 
-			entry.getAuthor(), 
-			DateFormat.getDateInstance(DateFormat.SHORT).format(entry.getPostDate())
-		);
-		
-		viewHolder.subTitleView.setText(formattedSubTitle);
-		
+		viewHolder.hostname.setText(entry.getHostname());
+		viewHolder.groupname.setText(entry.getGroup_name());
+		viewHolder.ipAddress.setText(entry.getIp_address());
+		viewHolder.nicmac.setText(entry.getNic_mac());
+		viewHolder.comment.setText(entry.getComment());
+
 		// Setting image view is also simple
-		viewHolder.imageView.setImageResource(entry.getIcon());
+		//viewHolder.imageView.setImageResource(entry.getIcon());
 		
 		return view;
 	}
@@ -78,9 +74,12 @@ public final class EntryAdapter extends ArrayAdapter<EntryPoj> {
 		if(null == tag || !(tag instanceof ViewHolder)) {
 			viewHolder = new ViewHolder();
 			
-			viewHolder.titleView = (TextView) workingView.findViewById(R.id.news_entry_title);
-			viewHolder.subTitleView = (TextView) workingView.findViewById(R.id.news_entry_subtitle);
-			viewHolder.imageView = (ImageView) workingView.findViewById(R.id.news_entry_icon);
+			viewHolder.hostname = (TextView) workingView.findViewById(R.id.hostname);
+			viewHolder.groupname = (TextView) workingView.findViewById(R.id.groupname);
+			//viewHolder.imageView = (ImageView) workingView.findViewById(R.id.news_entry_icon);
+			viewHolder.ipAddress = (TextView) workingView.findViewById(R.id.ipaddress);
+			viewHolder.nicmac = (TextView) workingView.findViewById(R.id.nicmac);
+			viewHolder.comment = (TextView) workingView.findViewById(R.id.comment);
 			
 			workingView.setTag(viewHolder);
 			
@@ -96,9 +95,12 @@ public final class EntryAdapter extends ArrayAdapter<EntryPoj> {
 	 * Since views are recycled, these references will never change
 	 */
 	private static class ViewHolder {
-		public TextView titleView;
-		public TextView subTitleView;
-		public ImageView imageView;
+		public TextView hostname;
+		public TextView groupname;
+		//public ImageView imageView;
+		public TextView ipAddress;
+		public TextView nicmac;
+		public TextView comment;
 	}
 	
 	

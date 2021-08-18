@@ -4,6 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/user/AndroidStudioProjects/WakeOnLan/app/src/main/res/layout/activity_main.xml" value="0.17831813576494426" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/WakeOnLan/app/src/main/res/layout/activity_settings.xml" value="0.697265625" />
+        <entry key="..\:/Users/user/AndroidStudioProjects/WakeOnLan/app/src/main/res/layout/entry_list_item.xml" value="0.16168478260869565" />
         <entry key="..\:/Users/user/AndroidStudioProjects/WakeOnLan/app/src/main/res/layout/news_entry_list_item.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/user/AndroidStudioProjects/WakeOnLan/app/src/main/res/menu/menu_options.xml" value="0.33425925925925926" />
       </map>

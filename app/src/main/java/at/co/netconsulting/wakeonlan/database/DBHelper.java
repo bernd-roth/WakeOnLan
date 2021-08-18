@@ -6,20 +6,26 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.widget.Toast;
+
+import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class DBHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "wifi.db";
     public static final String WIFI_TABLE_NAME = "wifi";
     public static final String WIFI_COLUMN_ID = "id";
+    //public static final String WIFI_COLUMN_IMAGEVIEW = "imageView";
     public static final String WIFI_COLUMN_HOSTNAME = "hostname";
     public static final String WIFI_COLUMN_NIC_MAC = "nic_mac";
     public static final String WIFI_COLUMN_IP_ADDRESS = "ip_address";
     public static final String WIFI_COLUMN_GROUP_NAME = "group_name";
     public static final String WIFI_COLUMN_COMMENT = "comment";
-    private HashMap hp;
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME , null, 1);
@@ -84,18 +90,18 @@ public class DBHelper extends SQLiteOpenHelper {
                 new String[] { Integer.toString(id) });
     }
 
-    public ArrayList<String> getAllEntries() {
-        ArrayList<String> array_list = new ArrayList<String>();
+    public List getAllEntries() {
+        List allEntries = new ArrayList<>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery( "select * from wifi", null );
+        Cursor res =  db.rawQuery( "SELECT hostname, nic_mac, ip_address, group_name, comment FROM wifi", null );
         res.moveToFirst();
 
         while(res.isAfterLast() == false){
-            array_list.add(res.getString(res.getColumnIndex(WIFI_TABLE_NAME)));
+            allEntries.add(res.getString(res.getColumnIndex(WIFI_TABLE_NAME)));
             res.moveToNext();
         }
-        return array_list;
+        return allEntries;
     }
 
     public ArrayList<String> getHostnameByName(String hostname) {
