@@ -8,17 +8,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="How to start all server"/>
-    <CheckBox
-        android:id="@+id/startAllFromHostname"
+    <RadioGroup
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start all server individually" />
-
-    <CheckBox
-        android:id="@+id/startAllFromGroupname"
+        android:id="@+id/radioGroup">
+    <RadioButton
+        android:id="@+id/radioButtonStartAllFromHostname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start all server by group name" />
+        android:text="Start all server individually"
+        android:checked="false"  />
 
-
+    <RadioButton
+        android:id="@+id/radioButtonStartAllFromGroupname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start all server by group name"
+        android:checked="false"  />
+    </RadioGroup>
 </LinearLayout>

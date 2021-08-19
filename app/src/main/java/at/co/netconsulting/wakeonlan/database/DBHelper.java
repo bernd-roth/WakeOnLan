@@ -138,4 +138,9 @@ public class DBHelper extends SQLiteOpenHelper {
         db.close();
         return count;
     }
+
+    public void deleteAllEntries () {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("delete from "+ WIFI_TABLE_NAME);
+    }
 }

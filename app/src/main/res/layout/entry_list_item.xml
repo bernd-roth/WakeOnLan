@@ -20,7 +20,8 @@
         android:layout_height="wrap_content"
 		android:layout_margin="5dp"
         android:textSize="14sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:longClickable="true" />
         <!--android:layout_toRightOf="@id/entry_icon"
         android:layout_alignTop="@id/entry_icon"-->
     
@@ -30,7 +31,8 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/hostname"
         android:layout_below="@id/hostname"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:longClickable="true" />
 
     <TextView
         android:id="@+id/ipaddress"
@@ -38,7 +40,8 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/groupname"
         android:layout_below="@id/groupname"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:longClickable="true" />
 
     <TextView
         android:id="@+id/nicmac"
@@ -46,7 +49,8 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/ipaddress"
         android:layout_below="@id/ipaddress"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:longClickable="true" />
 
     <TextView
         android:id="@+id/comment"
@@ -54,5 +58,6 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/nicmac"
         android:layout_below="@id/nicmac"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:longClickable="true" />
 </RelativeLayout>
