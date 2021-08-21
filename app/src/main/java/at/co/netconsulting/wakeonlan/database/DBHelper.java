@@ -143,4 +143,19 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("delete from "+ WIFI_TABLE_NAME);
     }
+
+    public void update (String hostname, int id) {
+// calling a method to get writable database.
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+        // on below line we are passing all values
+        // along with its key and value pair.
+        contentValues.put(WIFI_COLUMN_HOSTNAME, hostname);
+
+        // on below line we are calling a update method to update our database and passing our values.
+        // and we are comparing it with name of our course which is stored in original name variable.
+        db.update(WIFI_TABLE_NAME, contentValues, id + " = ? " , new String[]{String.valueOf(hostname)});
+        db.close();
+    }
 }

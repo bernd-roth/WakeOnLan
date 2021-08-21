@@ -10,7 +10,7 @@ import at.co.netconsulting.wakeonlan.general.BaseActivity;
 
 public class SettingsActivity extends BaseActivity {
     private int radioButtonEvaluation;
-    static SharedPreferences sharedPreferences;
+    private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor sharedEditor;
     private RadioGroup radioGroup;
     private RadioButton radioButtonHostname,radioButtonGroupname;

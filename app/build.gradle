@@ -3,12 +3,12 @@ plugins {
 }
 
 android {
-    compileSdk 30
+    compileSdk 28
 
     defaultConfig {
         applicationId "at.co.netconsulting.wakeonlan"
-        minSdk 30
-        targetSdk 30
+        minSdk 28
+        targetSdk 28
         versionCode 1
         versionName "1.0"
 
