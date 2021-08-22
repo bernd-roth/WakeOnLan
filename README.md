@@ -8,7 +8,7 @@ Description: WakeOnLan enables you to wake up all servers/clients in the same su
 2. Wake up a defined group of servers and/or clients
 3. Define a point in time, when servers/clients should be woken up
 
-##How to handle the app
+## How to handle the app
 
 1. Servers and clients have to be added manually
 2. Within the settings activity define whether you want to wake up all server individually
