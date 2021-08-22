@@ -6,14 +6,11 @@ import android.database.Cursor;
 import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.widget.Toast;
 
-import java.sql.Blob;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+
+import at.co.netconsulting.wakeonlan.poj.EntryPoj;
 
 public class DBHelper extends SQLiteOpenHelper {
 
@@ -22,9 +19,10 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String WIFI_COLUMN_ID = "id";
     //public static final String WIFI_COLUMN_IMAGEVIEW = "imageView";
     public static final String WIFI_COLUMN_HOSTNAME = "hostname";
-    public static final String WIFI_COLUMN_NIC_MAC = "nic_mac";
+    public static final String WIFI_COLUMN_GROUP_NAME = "groupname";
     public static final String WIFI_COLUMN_IP_ADDRESS = "ip_address";
-    public static final String WIFI_COLUMN_GROUP_NAME = "group_name";
+    public static final String WIFI_COLUMN_BROADCAST_ADDRESS = "broadcast";
+    public static final String WIFI_COLUMN_NIC_MAC = "nic_mac";
     public static final String WIFI_COLUMN_COMMENT = "comment";
 
     public DBHelper(Context context) {
@@ -36,7 +34,7 @@ public class DBHelper extends SQLiteOpenHelper {
         // TODO Auto-generated method stub
         db.execSQL(
                 "create table wifi " +
-                        "(id integer primary key, hostname String, nic_mac String, ip_address String, group_name String, comment String)"
+                        "(id integer primary key autoincrement, hostname String, groupname String, ip_address String, broadcast String, nic_mac String, comment String)"
         );
     }
 
@@ -47,22 +45,18 @@ public class DBHelper extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public boolean insertWifi (String hostname, String nic_mac, String ip_address, String group_name, String comment) {
+    public boolean insertWifi (String hostname, String group_name, String ip_address, String broadcast, String nic_mac, String comment) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("hostname", hostname);
         contentValues.put("nic_mac", nic_mac);
         contentValues.put("ip_address", ip_address);
-        contentValues.put("group_name", group_name);
+        contentValues.put("broadcast", broadcast);
+        contentValues.put("groupname", group_name);
         contentValues.put("comment", comment);
         db.insert(WIFI_TABLE_NAME, null, contentValues);
+        db.close();
         return true;
-    }
-
-    public Cursor getData(int id) {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery( "select * from wifi where id="+id+"", null );
-        return res;
     }
 
     public int numberOfRows(){
@@ -71,72 +65,26 @@ public class DBHelper extends SQLiteOpenHelper {
         return numRows;
     }
 
-    public boolean updateLocation (Integer id, String hostname, String nic_mac, String ip_address, String group_name, String comment) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("hostname", hostname);
-        contentValues.put("nic_mac", nic_mac);
-        contentValues.put("ip_address", ip_address);
-        contentValues.put("group_name", group_name);
-        contentValues.put("comment", comment);
-        db.update(WIFI_TABLE_NAME, contentValues, "id = ? ", new String[] { Integer.toString(id) } );
-        return true;
-    }
-
-    public Integer deleteLocation (Integer id) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        return db.delete(WIFI_TABLE_NAME,
-                "id = ? ",
-                new String[] { Integer.toString(id) });
-    }
-
-    public List getAllEntries() {
-        List allEntries = new ArrayList<>();
+    public List<EntryPoj> getAllEntries() {
+        List<EntryPoj> allEntries = new ArrayList<EntryPoj>();
 
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery( "SELECT hostname, nic_mac, ip_address, group_name, comment FROM wifi", null );
+        Cursor res =  db.rawQuery( "SELECT hostname, groupname, ip_address, broadcast, nic_mac, comment FROM wifi ORDER BY id ASC", null );
         res.moveToFirst();
 
-        while(res.isAfterLast() == false){
-            allEntries.add(res.getString(res.getColumnIndex(WIFI_TABLE_NAME)));
+        while(!res.isAfterLast()){
+            String hostname = res.getString(res.getColumnIndex(WIFI_COLUMN_HOSTNAME));
+            String groupname = res.getString(res.getColumnIndex(WIFI_COLUMN_GROUP_NAME));
+            String ip_address = res.getString(res.getColumnIndex(WIFI_COLUMN_IP_ADDRESS));
+            String broadcast = res.getString(res.getColumnIndex(WIFI_COLUMN_BROADCAST_ADDRESS));
+            String nic_mac = res.getString(res.getColumnIndex(WIFI_COLUMN_NIC_MAC));
+            String comment = res.getString(res.getColumnIndex(WIFI_COLUMN_COMMENT));
+
+            allEntries.add(new EntryPoj(hostname, groupname, ip_address, broadcast, nic_mac, comment));
+
             res.moveToNext();
         }
         return allEntries;
-    }
-
-    public ArrayList<String> getHostnameByName(String hostname) {
-        ArrayList<String> array_list = new ArrayList<String>();
-
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery( "SELECT * FROM wifi WHERE hostname = " + hostname, null );
-        res.moveToFirst();
-
-        while(res.isAfterLast() == false){
-            array_list.add(res.getString(res.getColumnIndex(WIFI_TABLE_NAME)));
-            res.moveToNext();
-        }
-        return array_list;
-    }
-
-    public ArrayList<String> getAllHostnames() {
-        ArrayList<String> array_list = new ArrayList<String>();
-
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor res =  db.rawQuery( "SELECT hostname FROM wifi", null );
-        res.moveToFirst();
-
-        while(res.isAfterLast() == false){
-            array_list.add(res.getString(res.getColumnIndex(WIFI_TABLE_NAME)));
-            res.moveToNext();
-        }
-        return array_list;
-    }
-
-    public long countAllEntries() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        long count = DatabaseUtils.queryNumEntries(db, WIFI_TABLE_NAME);
-        db.close();
-        return count;
     }
 
     public void deleteAllEntries () {
@@ -144,18 +92,52 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("delete from "+ WIFI_TABLE_NAME);
     }
 
-    public void update (String hostname, int id) {
-// calling a method to get writable database.
+    public void deleteSelectedEntry (EntryPoj entryPoj) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.execSQL("DELETE FROM "+ WIFI_TABLE_NAME + " WHERE hostname = '" + entryPoj.getHostname() + "' AND ip_address = '" + entryPoj.getIp_address() + "';");
+        db.close();
+    }
+
+    public void update (String hostname, String groupName, String ip, String broadcast, String nicMac, String comment, int id) {
+        // calling a method to get writable database.
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
 
         // on below line we are passing all values
         // along with its key and value pair.
         contentValues.put(WIFI_COLUMN_HOSTNAME, hostname);
+        contentValues.put(WIFI_COLUMN_GROUP_NAME, groupName);
+        contentValues.put(WIFI_COLUMN_IP_ADDRESS, ip);
+        contentValues.put(WIFI_COLUMN_BROADCAST_ADDRESS, broadcast);
+        contentValues.put(WIFI_COLUMN_NIC_MAC, nicMac);
+        contentValues.put(WIFI_COLUMN_COMMENT, comment);
 
         // on below line we are calling a update method to update our database and passing our values.
         // and we are comparing it with name of our course which is stored in original name variable.
-        db.update(WIFI_TABLE_NAME, contentValues, id + " = ? " , new String[]{String.valueOf(hostname)});
+        db.execSQL("UPDATE " + WIFI_TABLE_NAME + " SET hostname = '" + hostname + "', groupname = '" + groupName + "', ip_address = '" + ip + "', broadcast = '" + broadcast + "', nic_mac = '" + nicMac + "', comment = '" + comment + "' WHERE id = " + id + ";");
+//        db.update(WIFI_TABLE_NAME, contentValues, id + " = ? " , new String[]{String.valueOf(id)});
         db.close();
+    }
+
+    public List<EntryPoj> getAllEntriesByGroupName(String groupName) {
+        List<EntryPoj> allEntries = new ArrayList<EntryPoj>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor res =  db.rawQuery( "SELECT hostname, groupname, ip_address, broadcast, nic_mac, comment FROM wifi WHERE groupname = '" + groupName + "' ORDER BY id ASC", null );
+
+        if (res .moveToFirst()) {
+            do {
+                String hostname = res.getString(res.getColumnIndex(WIFI_COLUMN_HOSTNAME));
+                String groupname = res.getString(res.getColumnIndex(WIFI_COLUMN_GROUP_NAME));
+                String ip_address = res.getString(res.getColumnIndex(WIFI_COLUMN_IP_ADDRESS));
+                String broadcast = res.getString(res.getColumnIndex(WIFI_COLUMN_BROADCAST_ADDRESS));
+                String nic_mac = res.getString(res.getColumnIndex(WIFI_COLUMN_NIC_MAC));
+                String comment = res.getString(res.getColumnIndex(WIFI_COLUMN_COMMENT));
+
+                allEntries.add(new EntryPoj(hostname, groupname, ip_address, broadcast, nic_mac, comment));
+            } while (res .moveToNext());
+        }
+        res .close();
+        return allEntries;
     }
 }

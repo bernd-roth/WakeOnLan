@@ -1,13 +1,13 @@
 package at.co.netconsulting.wakeonlan.general;
 
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import at.co.netconsulting.wakeonlan.MainActivity;
+import at.co.netconsulting.wakeonlan.Manual_Input_Activity;
 import at.co.netconsulting.wakeonlan.R;
 import at.co.netconsulting.wakeonlan.SettingsActivity;
 
@@ -31,6 +31,10 @@ public class BaseActivity extends Activity {
                 return true;
             case R.id.action_settings:
                 intent = new Intent(this, SettingsActivity.class);
+                this.startActivity(intent);
+                return true;
+            case R.id.action_manual_input:
+                intent = new Intent(this, Manual_Input_Activity.class);
                 this.startActivity(intent);
                 return true;
             default:

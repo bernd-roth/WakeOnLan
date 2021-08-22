@@ -37,6 +37,7 @@ public final class EntryAdapter extends ArrayAdapter<EntryPoj> {
 		viewHolder.hostname.setText(entry.getHostname());
 		viewHolder.groupname.setText(entry.getGroup_name());
 		viewHolder.ipAddress.setText(entry.getIp_address());
+		viewHolder.broadcast.setText(entry.getBroadcast());
 		viewHolder.nicmac.setText(entry.getNic_mac());
 		viewHolder.comment.setText(entry.getComment());
 
@@ -78,6 +79,7 @@ public final class EntryAdapter extends ArrayAdapter<EntryPoj> {
 			viewHolder.groupname = (TextView) workingView.findViewById(R.id.groupname);
 			//viewHolder.imageView = (ImageView) workingView.findViewById(R.id.news_entry_icon);
 			viewHolder.ipAddress = (TextView) workingView.findViewById(R.id.ipaddress);
+			viewHolder.broadcast = (TextView) workingView.findViewById(R.id.broadcast);
 			viewHolder.nicmac = (TextView) workingView.findViewById(R.id.nicmac);
 			viewHolder.comment = (TextView) workingView.findViewById(R.id.comment);
 			
@@ -99,6 +101,7 @@ public final class EntryAdapter extends ArrayAdapter<EntryPoj> {
 		public TextView groupname;
 		//public ImageView imageView;
 		public TextView ipAddress;
+		public TextView broadcast;
 		public TextView nicmac;
 		public TextView comment;
 	}
