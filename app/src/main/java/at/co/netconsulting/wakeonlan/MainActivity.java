@@ -71,14 +71,14 @@ public class MainActivity extends BaseActivity {
                 if(radioButtonId == R.id.radioButtonStartAllFromHostname){
                     EntryPoj entryPoj = entryAdapter.getItem(position);
                     String ip = entryPoj.getIp_address();
-                    String nicMac = entryPoj.getGroup_name();
+                    String nicMac = entryPoj.getNic_mac();
                     AsyncTask<Object, Object, Object> send = new MagicPacket(ip, nicMac, port).execute();
                 }else if(radioButtonId == R.id.radioButtonStartAllFromGroupname){
                     EntryPoj entryPoj = entryAdapter.getItem(position);
                     List<EntryPoj> listPoj = dbHelper.getAllEntriesByGroupName(entryPoj.getGroup_name());
                     for(int i = 0; i<listPoj.size(); i++) {
                         String ip = listPoj.get(position).getIp_address();
-                        String nicMac = entryPoj.getGroup_name();
+                        String nicMac = entryPoj.getNic_mac();
                         AsyncTask<Object, Object, Object> send = new MagicPacket(ip, nicMac, port).execute();
                     }
                 }
