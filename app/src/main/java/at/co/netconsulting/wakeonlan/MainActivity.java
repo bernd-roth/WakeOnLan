@@ -1,21 +1,38 @@
 package at.co.netconsulting.wakeonlan;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
+
 import androidx.appcompat.widget.Toolbar;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.opencsv.CSVReader;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import at.co.netconsulting.wakeonlan.database.DBHelper;
 import at.co.netconsulting.wakeonlan.general.BaseActivity;
+import at.co.netconsulting.wakeonlan.general.SharedPreferenceModel;
 import at.co.netconsulting.wakeonlan.poj.EntryPoj;
 
 public class MainActivity extends BaseActivity {
@@ -27,6 +44,7 @@ public class MainActivity extends BaseActivity {
     private ListView entryListView;
     private EntryAdapter entryAdapter;
     private SharedPreferences sharedPreferences;
+    private Button delete;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -64,22 +82,38 @@ public class MainActivity extends BaseActivity {
         entryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                int radioButtonId = sharedPreferences.getInt("PREFS_RADIOGROUP_SETTINGS", 0);
+                SharedPreferenceModel sharedPreferenceModel = new SharedPreferenceModel(getApplicationContext());
+                int savedRadioIndex = sharedPreferenceModel.getIntSharedPreference("Server_Or_Group");
+
                 sharedPreferences = getSharedPreferences("PREFS_PORT", 0);
                 int port = sharedPreferences.getInt("PREFS_PORT", 9);
 
-                if(radioButtonId == R.id.radioButtonStartAllFromHostname){
+                sharedPreferences = getSharedPreferences("PREFS_CHECKBOX_CSV",0);
+                boolean checkboxCsvEvaluation = sharedPreferences.getBoolean("PREFS_CHECKBOX_CSV", false);
+
+                if(checkboxCsvEvaluation) {
                     EntryPoj entryPoj = entryAdapter.getItem(position);
                     String ip = entryPoj.getIp_address();
+                    String broadcast = entryPoj.getBroadcast();
                     String nicMac = entryPoj.getNic_mac();
-                    AsyncTask<Object, Object, Object> send = new MagicPacket(ip, nicMac, port).execute();
-                }else if(radioButtonId == R.id.radioButtonStartAllFromGroupname){
+                    AsyncTask<Object, Object, Object> send = new MagicPacket(broadcast, nicMac, port).execute();
+                } else
+                //Only for one server/client to start
+                if(savedRadioIndex == 0){
+                    EntryPoj entryPoj = entryAdapter.getItem(position);
+                    String ip = entryPoj.getIp_address();
+                    String broadcast = entryPoj.getBroadcast();
+                    String nicMac = entryPoj.getNic_mac();
+                    AsyncTask<Object, Object, Object> send = new MagicPacket(broadcast, nicMac, port).execute();
+                //Start more than 1 server/client
+                }else if(savedRadioIndex == 1 && !checkboxCsvEvaluation){
                     EntryPoj entryPoj = entryAdapter.getItem(position);
                     List<EntryPoj> listPoj = dbHelper.getAllEntriesByGroupName(entryPoj.getGroup_name());
                     for(int i = 0; i<listPoj.size(); i++) {
                         String ip = listPoj.get(position).getIp_address();
+                        String broadcast = entryPoj.getBroadcast();
                         String nicMac = entryPoj.getNic_mac();
-                        AsyncTask<Object, Object, Object> send = new MagicPacket(ip, nicMac, port).execute();
+                        AsyncTask<Object, Object, Object> send = new MagicPacket(broadcast, nicMac, port).execute();
                     }
                 }
             }
@@ -87,8 +121,21 @@ public class MainActivity extends BaseActivity {
     }
 
     private void getEntriesFromDb() {
-        List<EntryPoj> listEntryPoj = dbHelper.getAllEntries();
-        entryAdapter.addAll(listEntryPoj);
+        //CSV or DB
+        sharedPreferences = getSharedPreferences("PREFS_FILENAME",0);
+        String checkboxEvaluation = sharedPreferences.getString("PREFS_FILENAME", "");
+
+        sharedPreferences = getSharedPreferences("PREFS_CHECKBOX_CSV",0);
+        boolean checkboxCsvEvaluation = sharedPreferences.getBoolean("PREFS_CHECKBOX_CSV", false);
+
+        if(checkboxEvaluation.equals("")){
+            List<EntryPoj> listEntryPoj = dbHelper.getAllEntries();
+            entryAdapter.addAll(listEntryPoj);
+        }else if(checkboxCsvEvaluation && !checkboxEvaluation.equals("")){
+            importCSV();
+            Button delete = (Button) findViewById(R.id.buttonDelete);
+            delete.setVisibility(View.GONE);
+        }
     }
 
     private void openDialog(EntryPoj entryPoj, int position) {
@@ -157,7 +204,6 @@ public class MainActivity extends BaseActivity {
         alertDialog.show();
     }
 
-
     //Initializing objects
     private void initializeObjects() {
         dbHelper = new DBHelper(getApplicationContext());
@@ -173,9 +219,18 @@ public class MainActivity extends BaseActivity {
     }
 
     public void delete(View view) {
-        dbHelper.deleteAllEntries();
-        entryAdapter.clear();
-        getEntriesFromDb();
+        //CSV or DB
+        sharedPreferences = getSharedPreferences("PREFS_FILENAME",0);
+        String checkboxEvaluation = sharedPreferences.getString("PREFS_FILENAME", "");
+
+        if(checkboxEvaluation==""){
+            List<EntryPoj> listEntryPoj = dbHelper.getAllEntries();
+            entryAdapter.addAll(listEntryPoj);
+        }else {
+            importCSV();
+            Button delete = (Button) findViewById(R.id.buttonDelete);
+            delete.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -183,5 +238,33 @@ public class MainActivity extends BaseActivity {
         super.onResume();
         entryAdapter.clear();
         getEntriesFromDb();
+    }
+
+    public void importCSV() {
+        try {
+            sharedPreferences = getSharedPreferences("PREFS_FILENAME", 0);
+            String csvFileName = sharedPreferences.getString("PREFS_FILENAME", "/server_client.txt");
+
+            String hostname = null, groupName, ip, broadcast, mac, comment;
+            List<EntryPoj> listEntryPoj = new ArrayList<EntryPoj>();
+            File csvfile = new File(Environment.getExternalStorageDirectory() + "/" + csvFileName);
+            CSVReader reader = new CSVReader(new FileReader(csvfile.getAbsolutePath()));
+            String[] nextLine;
+            while ((nextLine = reader.readNext()) != null) {
+                String[] splitLine = nextLine[0].split(";");
+                hostname = splitLine[0];
+                groupName = splitLine[1];
+                ip = splitLine[2];
+                broadcast = splitLine[3];
+                mac = splitLine[4];
+                comment = splitLine[5];
+                EntryPoj poj = new EntryPoj(hostname, groupName, ip, broadcast, mac, comment);
+                listEntryPoj.add(poj);
+            }
+            entryAdapter.addAll(listEntryPoj);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "The specified file was not found", Toast.LENGTH_SHORT).show();
+        }
     }
 }

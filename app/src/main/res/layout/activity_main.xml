@@ -24,7 +24,7 @@
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <Button
-        android:id="@+id/delete"
+        android:id="@+id/buttonDelete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Delete all entries"

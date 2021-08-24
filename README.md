@@ -19,3 +19,6 @@ Description: WakeOnLan enables you to wake up all servers/clients in the same su
     either choose "DELETE" the selected entry or "UPDATE"
 5.  Within the main activity you can choose to delete all entries from the list and the database
     immediately
+6.  Choose whether to import server/clients from CSV or Database
+7.  Currently, waking up a group of servers/clients is only possible when server and clients have
+    been imported to DB.

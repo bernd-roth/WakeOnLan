@@ -1,29 +1,54 @@
 package at.co.netconsulting.wakeonlan;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
+
 import androidx.appcompat.widget.Toolbar;
+
+import com.opencsv.CSVReader;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.List;
+
 import at.co.netconsulting.wakeonlan.general.BaseActivity;
+import at.co.netconsulting.wakeonlan.general.SharedPreferenceModel;
 
 public class SettingsActivity extends BaseActivity {
     private int radioButtonEvaluation;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor sharedEditor;
     private RadioGroup radioGroup;
-    private RadioButton radioButtonHostname,radioButtonGroupname;
+    private RadioButton radioButton;
     private Button buttonSave;
     private EditText editTextPort;
     private int port;
     private Toolbar toolbar;
+    private EditText editTextImportCSV;
+    private String csvFileName;
+    private CheckBox checkBoxLoadFromCsv;
+    SharedPreferenceModel prefs = new SharedPreferenceModel(SettingsActivity.this);
+    private boolean isCheckBox;
+    private final String RADIO_BUTTON_GROUP = "Server_Or_Group";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,53 +60,94 @@ public class SettingsActivity extends BaseActivity {
         toolbar.inflateMenu(R.menu.menu_settings);
 
         initializeObjects();
-        loadPreferences();
+        loadPreferencesCsvOrDb();
+        loadPreferencesServerOrGroup();
+        loadPreferencesPort();
+        loadPreferencesFilename();
 
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        RadioGroup.OnCheckedChangeListener radioGroupOnCheckedChangeListener = new RadioGroup.OnCheckedChangeListener(){
+            @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                if(checkedId == R.id.radioButtonStartAllFromHostname){
-                    sharedEditor.clear();
-                    sharedEditor.putInt("PREFS_RADIOGROUP_SETTINGS", checkedId);
-                    sharedEditor.apply();
-                }else if(checkedId == R.id.radioButtonStartAllFromGroupname){
-                    sharedEditor.clear();
-                    sharedEditor.putInt("PREFS_RADIOGROUP_SETTINGS", checkedId);
-                    sharedEditor.apply();
+                RadioButton checkedRadioButton = (RadioButton)radioGroup.findViewById(checkedId);
+                int checkedIndex = radioGroup.indexOfChild(checkedRadioButton);
+                int selectedId = radioGroup.getCheckedRadioButtonId();
+                radioButton = (RadioButton) findViewById(selectedId);
+                prefs.saveIntSharedPreference(RADIO_BUTTON_GROUP, checkedIndex);
+            }
+        };
+
+        radioGroup = (RadioGroup)findViewById(R.id.radioGroup);
+        radioGroup.setOnCheckedChangeListener(radioGroupOnCheckedChangeListener);
+
+        checkBoxLoadFromCsv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // This gets the correct item to work with.
+                if(checkBoxLoadFromCsv.isChecked()){
+                    boolean isChecked = true;
+                    String key = "PREFS_CHECKBOX_CSV";
+                    prefs.saveBooleanSharedPreference(key, isChecked);
+                }else{
+                    boolean isChecked = false;
+                    String key = "PREFS_CHECKBOX_CSV";
+                    prefs.saveBooleanSharedPreference(key, isChecked);
                 }
             }
         });
     }
 
-    private void loadPreferences() {
-        sharedPreferences = getSharedPreferences("PREFS_RADIOGROUP_SETTINGS",0);
-        sharedEditor = sharedPreferences.edit();
-        radioButtonEvaluation = sharedPreferences.getInt("PREFS_RADIOGROUP_SETTINGS", 0);
+    private void loadPreferencesFilename() {
+        SharedPreferences sharedPreferences = getSharedPreferences("PREFS_FILENAME", MODE_PRIVATE);
+        String filename = sharedPreferences.getString("PREFS_FILENAME", "");
+        editTextImportCSV.setText(filename);
+    }
 
-        if(radioButtonEvaluation == R.id.radioButtonStartAllFromHostname){
-            radioButtonHostname.setChecked(true);
-        }else if(radioButtonEvaluation == R.id.radioButtonStartAllFromGroupname){
-            radioButtonGroupname.setChecked(true);
-        }
-
-        sharedPreferences = getSharedPreferences("PREFS_PORT", 0);
+    private void loadPreferencesPort() {
+        SharedPreferences sharedPreferences = getSharedPreferences("PREFS_PORT", MODE_PRIVATE);
         int port = sharedPreferences.getInt("PREFS_PORT", 9);
         editTextPort.setText(String.valueOf(port));
     }
 
-    private void initializeObjects() {
+    private void loadPreferencesServerOrGroup() {
+        int savedRadioIndex = prefs.getIntSharedPreference(RADIO_BUTTON_GROUP);
         radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
-        radioButtonHostname = (RadioButton)findViewById(R.id.radioButtonStartAllFromHostname);
-        radioButtonGroupname = (RadioButton)findViewById(R.id.radioButtonStartAllFromGroupname);
+        if(savedRadioIndex==0){
+            ((RadioButton) radioGroup.getChildAt(0)).setChecked(true);
+            prefs.saveStringSharedPreference("PREFS_SERVER_CLIENT", "SERVER");
+        }else {
+            ((RadioButton) radioGroup.getChildAt(savedRadioIndex)).setChecked(true);
+            prefs.saveStringSharedPreference("PREFS_SERVER_CLIENT", "CLIENT");
+        }
+    }
+
+    private void loadPreferencesCsvOrDb() {
+        isCheckBox = prefs.getBooleanSharedPreference("PREFS_CHECKBOX_CSV");
+        checkBoxLoadFromCsv.setChecked(isCheckBox);
+    }
+
+    private void initializeObjects() {
         buttonSave = findViewById(R.id.buttonSave);
         editTextPort = (EditText) findViewById(R.id.editTextPort);
+        editTextImportCSV = (EditText) findViewById(R.id.editTextImportCSVFile);
+
+        checkBoxLoadFromCsv = findViewById(R.id.checkBoxLoadFromCsv);
     }
 
     public void save(View view) {
-        sharedPreferences = getSharedPreferences("PREFS_PORT", Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        port = Integer.valueOf(String.valueOf(editTextPort.getText()));
-        editor.putInt("PREFS_PORT", port);
-        editor.commit();
+        savePort();
+        saveFilename();
+    }
+
+    private void savePort() {
+        int port = Integer.parseInt(editTextPort.getText().toString());
+        String key = "PREFS_PORT";
+        prefs.saveIntSharedPreference(key, port);
+    }
+
+    private void saveFilename() {
+        String filename = editTextImportCSV.getText().toString();
+        String key = "PREFS_FILENAME";
+        prefs.saveStringSharedPreference(key, filename);
     }
 
     public void showMenu(MenuItem item) {
