@@ -96,7 +96,9 @@ public class MainActivity extends BaseActivity {
                     String ip = entryPoj.getIp_address();
                     String broadcast = entryPoj.getBroadcast();
                     String nicMac = entryPoj.getNic_mac();
+                    String hostname = entryPoj.getHostname();
                     AsyncTask<Object, Object, Object> send = new MagicPacket(broadcast, nicMac, port).execute();
+                    Toast.makeText(getApplicationContext(), "Magic Packet to hostname " +hostname+ "was sent", Toast.LENGTH_LONG).show();
                 } else
                 //Only for one server/client to start
                 if(savedRadioIndex == 0){
@@ -104,16 +106,20 @@ public class MainActivity extends BaseActivity {
                     String ip = entryPoj.getIp_address();
                     String broadcast = entryPoj.getBroadcast();
                     String nicMac = entryPoj.getNic_mac();
+                    String hostname = entryPoj.getHostname();
                     AsyncTask<Object, Object, Object> send = new MagicPacket(broadcast, nicMac, port).execute();
+                    Toast.makeText(getApplicationContext(), "Magic Packet to hostname " +hostname+ "was sent", Toast.LENGTH_LONG).show();
                 //Start more than 1 server/client
                 }else if(savedRadioIndex == 1 && !checkboxCsvEvaluation){
                     EntryPoj entryPoj = entryAdapter.getItem(position);
                     List<EntryPoj> listPoj = dbHelper.getAllEntriesByGroupName(entryPoj.getGroup_name());
                     for(int i = 0; i<listPoj.size(); i++) {
-                        String ip = listPoj.get(position).getIp_address();
-                        String broadcast = entryPoj.getBroadcast();
-                        String nicMac = entryPoj.getNic_mac();
+                        String ip = listPoj.get(i).getIp_address();
+                        String broadcast = listPoj.get(i).getBroadcast();
+                        String nicMac = listPoj.get(i).getNic_mac();
+                        String group = listPoj.get(i).getGroup_name();
                         AsyncTask<Object, Object, Object> send = new MagicPacket(broadcast, nicMac, port).execute();
+                        Toast.makeText(getApplicationContext(), "Magic Packet to group " +group+ " was sent", Toast.LENGTH_LONG).show();
                     }
                 }
             }
@@ -128,7 +134,7 @@ public class MainActivity extends BaseActivity {
         sharedPreferences = getSharedPreferences("PREFS_CHECKBOX_CSV",0);
         boolean checkboxCsvEvaluation = sharedPreferences.getBoolean("PREFS_CHECKBOX_CSV", false);
 
-        if(checkboxEvaluation.equals("")){
+        if(checkboxCsvEvaluation==false){
             List<EntryPoj> listEntryPoj = dbHelper.getAllEntries();
             entryAdapter.addAll(listEntryPoj);
         }else if(checkboxCsvEvaluation && !checkboxEvaluation.equals("")){
