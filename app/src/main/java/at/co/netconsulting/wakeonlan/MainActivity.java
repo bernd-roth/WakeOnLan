@@ -91,27 +91,35 @@ public class MainActivity extends BaseActivity {
                 sharedPreferences = getSharedPreferences("PREFS_CHECKBOX_CSV",0);
                 boolean checkboxCsvEvaluation = sharedPreferences.getBoolean("PREFS_CHECKBOX_CSV", false);
 
-                if(checkboxCsvEvaluation) {
-                    EntryPoj entryPoj = entryAdapter.getItem(position);
+                EntryPoj entryPoj;
+                if(checkboxCsvEvaluation && savedRadioIndex == 1) {
+                    entryPoj = entryAdapter.getItem(position);
                     String ip = entryPoj.getIp_address();
                     String broadcast = entryPoj.getBroadcast();
                     String nicMac = entryPoj.getNic_mac();
+                    String groupName = entryPoj.getGroup_name();
                     String hostname = entryPoj.getHostname();
-                    AsyncTask<Object, Object, Object> send = new MagicPacket(broadcast, nicMac, port).execute();
-                    Toast.makeText(getApplicationContext(), "Magic Packet to hostname " +hostname+ "was sent", Toast.LENGTH_LONG).show();
+                    for(int i = 0; i<entryAdapter.getCount();i++) {
+                        entryPoj = entryAdapter.getItem(i);
+                        String groupNamePosition = entryPoj.getGroup_name();
+                        if(groupNamePosition.equals(groupName)) {
+                            AsyncTask<Object, Object, Object> send = new MagicPacket(broadcast, nicMac, port).execute();
+                            Toast.makeText(getApplicationContext(), "Magic Packet to hostname " +entryPoj.getHostname()+ " was sent", Toast.LENGTH_LONG).show();
+                        }
+                    }
                 } else
                 //Only for one server/client to start
                 if(savedRadioIndex == 0){
-                    EntryPoj entryPoj = entryAdapter.getItem(position);
+                    entryPoj = entryAdapter.getItem(position);
                     String ip = entryPoj.getIp_address();
                     String broadcast = entryPoj.getBroadcast();
                     String nicMac = entryPoj.getNic_mac();
                     String hostname = entryPoj.getHostname();
                     AsyncTask<Object, Object, Object> send = new MagicPacket(broadcast, nicMac, port).execute();
-                    Toast.makeText(getApplicationContext(), "Magic Packet to hostname " +hostname+ "was sent", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Magic Packet to hostname " +hostname+ " was sent", Toast.LENGTH_LONG).show();
                 //Start more than 1 server/client
                 }else if(savedRadioIndex == 1 && !checkboxCsvEvaluation){
-                    EntryPoj entryPoj = entryAdapter.getItem(position);
+                    entryPoj = entryAdapter.getItem(position);
                     List<EntryPoj> listPoj = dbHelper.getAllEntriesByGroupName(entryPoj.getGroup_name());
                     for(int i = 0; i<listPoj.size(); i++) {
                         String ip = listPoj.get(i).getIp_address();
