@@ -84,6 +84,20 @@
         android:layout_height="wrap_content"
         android:hint="Load from Csv?" />
 
+    <TextView
+        android:id="@+id/textViewSendArpXTimes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="How often to send ARP request" />
+
+    <EditText
+        android:id="@+id/editTextSendArpRequest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="1"
+        android:inputType="number"
+        android:hint="3" />
+
     <Button
         android:id="@+id/buttonSave"
         android:layout_width="match_parent"

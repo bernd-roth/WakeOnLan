@@ -50,7 +50,6 @@ public final class EntryAdapter extends ArrayAdapter<EntryPoj> {
 		} else {
 			view.setBackgroundColor(Color.WHITE);
 		}
-		
 		return view;
 	}
 

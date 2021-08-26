@@ -42,7 +42,7 @@ public class SettingsActivity extends BaseActivity {
     private RadioGroup radioGroup;
     private RadioButton radioButton;
     private Button buttonSave;
-    private EditText editTextPort;
+    private EditText editTextPort, editTextArpRequest;
     private int port;
     private Toolbar toolbar;
     private EditText editTextImportCSV;
@@ -67,6 +67,7 @@ public class SettingsActivity extends BaseActivity {
         loadPreferencesServerOrGroup();
         loadPreferencesPort();
         loadPreferencesFilename();
+        loadPreferencesArpRequest();
 
         RadioGroup.OnCheckedChangeListener radioGroupOnCheckedChangeListener = new RadioGroup.OnCheckedChangeListener(){
             @Override
@@ -97,6 +98,12 @@ public class SettingsActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    private void loadPreferencesArpRequest() {
+        SharedPreferences sharedPreferences = getSharedPreferences("PREFS_ARP_REQUEST", MODE_PRIVATE);
+        int arpRequest = sharedPreferences.getInt("PREFS_ARP_REQUEST", 1);
+        editTextArpRequest.setText(String.valueOf(arpRequest));
     }
 
     private void loadPreferencesFilename() {
@@ -132,6 +139,7 @@ public class SettingsActivity extends BaseActivity {
         buttonSave = findViewById(R.id.buttonSave);
         editTextPort = (EditText) findViewById(R.id.editTextPort);
         editTextImportCSV = (EditText) findViewById(R.id.editTextImportCSVFile);
+        editTextArpRequest = (EditText) findViewById(R.id.editTextSendArpRequest);
 
         checkBoxLoadFromCsv = findViewById(R.id.checkBoxLoadFromCsv);
     }
@@ -139,6 +147,13 @@ public class SettingsActivity extends BaseActivity {
     public void save(View view) {
         savePort();
         saveFilename();
+        saveArpRequest();
+    }
+
+    private void saveArpRequest() {
+        int arpRequest = Integer.parseInt(editTextArpRequest.getText().toString());
+        String key = "PREFS_ARP_REQUEST";
+        prefs.saveIntSharedPreference(key, arpRequest);
     }
 
     private void savePort() {

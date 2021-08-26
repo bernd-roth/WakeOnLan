@@ -92,6 +92,9 @@ public class MainActivity extends BaseActivity {
                 boolean checkboxCsvEvaluation = sharedPreferences.getBoolean("PREFS_CHECKBOX_CSV", false);
 
                 EntryPoj entryPoj;
+                sharedPreferences = getSharedPreferences("PREFS_ARP_REQUEST",0);
+                int arpRequest = sharedPreferences.getInt("PREFS_ARP_REQUEST", 1);
+
                 if(checkboxCsvEvaluation && savedRadioIndex == 1) {
                     entryPoj = entryAdapter.getItem(position);
                     String ip = entryPoj.getIp_address();
@@ -103,7 +106,9 @@ public class MainActivity extends BaseActivity {
                         entryPoj = entryAdapter.getItem(i);
                         String groupNamePosition = entryPoj.getGroup_name();
                         if(groupNamePosition.equals(groupName)) {
-                            AsyncTask<Object, Object, Object> send = new MagicPacket(broadcast, nicMac, port).execute();
+                            AsyncTask<Object, Object, Object> send;
+                            for(int j = 0; j<arpRequest; j++)
+                                send = new MagicPacket(broadcast, nicMac, port).execute();
                             Toast.makeText(getApplicationContext(), "Magic Packet to hostname " +entryPoj.getHostname()+ " was sent", Toast.LENGTH_LONG).show();
                         }
                     }
@@ -115,7 +120,9 @@ public class MainActivity extends BaseActivity {
                     String broadcast = entryPoj.getBroadcast();
                     String nicMac = entryPoj.getNic_mac();
                     String hostname = entryPoj.getHostname();
-                    AsyncTask<Object, Object, Object> send = new MagicPacket(broadcast, nicMac, port).execute();
+                    AsyncTask<Object, Object, Object> send;
+                    for(int j = 0; j<arpRequest; j++)
+                        send = new MagicPacket(broadcast, nicMac, port).execute();
                     Toast.makeText(getApplicationContext(), "Magic Packet to hostname " +hostname+ " was sent", Toast.LENGTH_LONG).show();
                 //Start more than 1 server/client
                 }else if(savedRadioIndex == 1 && !checkboxCsvEvaluation){
@@ -126,7 +133,9 @@ public class MainActivity extends BaseActivity {
                         String broadcast = listPoj.get(i).getBroadcast();
                         String nicMac = listPoj.get(i).getNic_mac();
                         String group = listPoj.get(i).getGroup_name();
-                        AsyncTask<Object, Object, Object> send = new MagicPacket(broadcast, nicMac, port).execute();
+                        AsyncTask<Object, Object, Object> send;
+                        for(int j = 0; j<arpRequest; j++)
+                            send = new MagicPacket(broadcast, nicMac, port).execute();
                         Toast.makeText(getApplicationContext(), "Magic Packet to group " +group+ " was sent", Toast.LENGTH_LONG).show();
                     }
                 }
