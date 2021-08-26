@@ -3,6 +3,7 @@ package at.co.netconsulting.wakeonlan;
 import java.text.DateFormat;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,6 +44,12 @@ public final class EntryAdapter extends ArrayAdapter<EntryPoj> {
 
 		// Setting image view is also simple
 		//viewHolder.imageView.setImageResource(entry.getIcon());
+
+		if (position % 2 == 1) {
+			view.setBackgroundColor(Color.LTGRAY);
+		} else {
+			view.setBackgroundColor(Color.WHITE);
+		}
 		
 		return view;
 	}

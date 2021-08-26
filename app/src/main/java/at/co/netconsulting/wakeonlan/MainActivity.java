@@ -147,8 +147,6 @@ public class MainActivity extends BaseActivity {
             entryAdapter.addAll(listEntryPoj);
         }else if(checkboxCsvEvaluation && !checkboxEvaluation.equals("")){
             importCSV();
-            Button delete = (Button) findViewById(R.id.buttonDelete);
-            delete.setVisibility(View.GONE);
         }
     }
 
@@ -230,21 +228,6 @@ public class MainActivity extends BaseActivity {
 
     public void showMenu(MenuItem item) {
         onOptionsItemSelected(item);
-    }
-
-    public void delete(View view) {
-        //CSV or DB
-        sharedPreferences = getSharedPreferences("PREFS_FILENAME",0);
-        String checkboxEvaluation = sharedPreferences.getString("PREFS_FILENAME", "");
-
-        if(checkboxEvaluation==""){
-            List<EntryPoj> listEntryPoj = dbHelper.getAllEntries();
-            entryAdapter.addAll(listEntryPoj);
-        }else {
-            importCSV();
-            Button delete = (Button) findViewById(R.id.buttonDelete);
-            delete.setVisibility(View.GONE);
-        }
     }
 
     @Override

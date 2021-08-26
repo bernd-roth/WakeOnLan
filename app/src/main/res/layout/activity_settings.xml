@@ -91,4 +91,17 @@
         android:text="Save"
         android:onClick="save"/>
 
+    <TextView
+        android:id="@+id/textViewDelete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Delete all entries from database" />
+
+    <Button
+        android:id="@+id/buttonDelete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Delete all entries"
+        android:onClick="delete"/>
+
 </LinearLayout>

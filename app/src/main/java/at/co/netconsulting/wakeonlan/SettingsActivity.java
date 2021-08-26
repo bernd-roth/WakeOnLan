@@ -30,8 +30,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 
+import at.co.netconsulting.wakeonlan.database.DBHelper;
 import at.co.netconsulting.wakeonlan.general.BaseActivity;
 import at.co.netconsulting.wakeonlan.general.SharedPreferenceModel;
+import at.co.netconsulting.wakeonlan.poj.EntryPoj;
 
 public class SettingsActivity extends BaseActivity {
     private int radioButtonEvaluation;
@@ -49,6 +51,7 @@ public class SettingsActivity extends BaseActivity {
     SharedPreferenceModel prefs = new SharedPreferenceModel(SettingsActivity.this);
     private boolean isCheckBox;
     private final String RADIO_BUTTON_GROUP = "Server_Or_Group";
+    private DBHelper dbHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,6 +151,11 @@ public class SettingsActivity extends BaseActivity {
         String filename = editTextImportCSV.getText().toString();
         String key = "PREFS_FILENAME";
         prefs.saveStringSharedPreference(key, filename);
+    }
+
+    public void delete(View view) {
+        dbHelper = new DBHelper(getApplicationContext());
+        dbHelper.deleteAllEntries();
     }
 
     public void showMenu(MenuItem item) {
