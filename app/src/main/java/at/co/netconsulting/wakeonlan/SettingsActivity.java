@@ -1,54 +1,31 @@
 package at.co.netconsulting.wakeonlan;
 
-import android.app.Activity;
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Toast;
-
 import androidx.appcompat.widget.Toolbar;
-
-import com.opencsv.CSVReader;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.List;
-
 import at.co.netconsulting.wakeonlan.database.DBHelper;
 import at.co.netconsulting.wakeonlan.general.BaseActivity;
 import at.co.netconsulting.wakeonlan.general.SharedPreferenceModel;
-import at.co.netconsulting.wakeonlan.poj.EntryPoj;
 
 public class SettingsActivity extends BaseActivity {
-    private int radioButtonEvaluation;
+    private int radioButtonEvaluation, port;
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor sharedEditor;
     private RadioGroup radioGroup;
     private RadioButton radioButton;
     private Button buttonSave;
-    private EditText editTextPort, editTextArpRequest;
-    private int port;
+    private EditText editTextPort, editTextArpRequest, editTextImportCSV;
     private Toolbar toolbar;
-    private EditText editTextImportCSV;
     private String csvFileName;
     private CheckBox checkBoxLoadFromCsv;
-    SharedPreferenceModel prefs = new SharedPreferenceModel(SettingsActivity.this);
+    private SharedPreferenceModel prefs = new SharedPreferenceModel(SettingsActivity.this);
     private boolean isCheckBox;
     private final String RADIO_BUTTON_GROUP = "Server_Or_Group";
     private DBHelper dbHelper;

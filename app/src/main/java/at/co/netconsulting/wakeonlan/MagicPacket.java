@@ -1,16 +1,9 @@
 package at.co.netconsulting.wakeonlan;
 
-import java.io.IOException;
+import android.os.AsyncTask;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.SocketException;
-import java.net.UnknownHostException;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import android.os.AsyncTask;
-import android.util.Log;
 
 public class MagicPacket extends AsyncTask<Object, Object, Object> {
 
