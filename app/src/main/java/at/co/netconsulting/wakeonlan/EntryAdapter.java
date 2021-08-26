@@ -14,16 +14,16 @@ import at.co.netconsulting.wakeonlan.poj.EntryPoj;
  */
 public final class EntryAdapter extends ArrayAdapter<EntryPoj> {
 
-	private final int newsItemLayoutResource;
+	private final int itemLayoutResource;
 
-	public EntryAdapter(final Context context, final int newsItemLayoutResource) {
+	public EntryAdapter(final Context context, final int itemLayoutResource) {
 		super(context, 0);
-		this.newsItemLayoutResource = newsItemLayoutResource;
+		this.itemLayoutResource = itemLayoutResource;
 	}
 
 	@Override
 	public View getView(final int position, final View convertView, final ViewGroup parent) {
-		
+
 		// We need to get the best view (re-used if possible) and then
 		// retrieve its corresponding ViewHolder, which optimizes lookup efficiency
 		final View view = getWorkingView(convertView);
@@ -40,7 +40,9 @@ public final class EntryAdapter extends ArrayAdapter<EntryPoj> {
 
 		// Setting image view is also simple
 		//viewHolder.imageView.setImageResource(entry.getIcon());
+		//TODO imageview
 
+		// Every second row must have a slightly different colour
 		if (position % 2 == 1) {
 			view.setBackgroundColor(Color.LTGRAY);
 		} else {
@@ -59,7 +61,7 @@ public final class EntryAdapter extends ArrayAdapter<EntryPoj> {
 			final LayoutInflater inflater = (LayoutInflater)context.getSystemService
 		      (Context.LAYOUT_INFLATER_SERVICE);
 			
-			workingView = inflater.inflate(newsItemLayoutResource, null);
+			workingView = inflater.inflate(itemLayoutResource, null);
 		} else {
 			workingView = convertView;
 		}
