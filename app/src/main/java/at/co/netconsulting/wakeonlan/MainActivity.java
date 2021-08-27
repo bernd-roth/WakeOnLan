@@ -36,6 +36,7 @@ public class MainActivity extends BaseActivity {
     private EntryAdapter entryAdapter;
     private SharedPreferences sharedPreferences;
     private Button delete;
+    private String magicPacket;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -100,7 +101,8 @@ public class MainActivity extends BaseActivity {
                             AsyncTask<Object, Object, Object> send;
                             for(int j = 0; j<arpRequest; j++)
                                 send = new MagicPacket(broadcast, nicMac, port).execute();
-                            Toast.makeText(getApplicationContext(), "Magic Packet to hostname " +entryPoj.getHostname()+ " was sent", Toast.LENGTH_LONG).show();
+                            magicPacket = getString(R.string.magic_packet_group, hostname);
+                            Toast.makeText(getApplicationContext(), magicPacket, Toast.LENGTH_LONG).show();
                         }
                     }
                 } else
@@ -114,7 +116,8 @@ public class MainActivity extends BaseActivity {
                     AsyncTask<Object, Object, Object> send;
                     for(int j = 0; j<arpRequest; j++)
                         send = new MagicPacket(broadcast, nicMac, port).execute();
-                    Toast.makeText(getApplicationContext(), "Magic Packet to hostname " +hostname+ " was sent", Toast.LENGTH_LONG).show();
+                    magicPacket = getString(R.string.magic_packet_host, hostname);
+                    Toast.makeText(getApplicationContext(), magicPacket, Toast.LENGTH_LONG).show();
                 //Start more than 1 server/client
                 }else if(savedRadioIndex == 1 && !checkboxCsvEvaluation){
                     entryPoj = entryAdapter.getItem(position);
@@ -127,7 +130,8 @@ public class MainActivity extends BaseActivity {
                         AsyncTask<Object, Object, Object> send;
                         for(int j = 0; j<arpRequest; j++)
                             send = new MagicPacket(broadcast, nicMac, port).execute();
-                        Toast.makeText(getApplicationContext(), "Magic Packet to group " +group+ " was sent", Toast.LENGTH_LONG).show();
+                        magicPacket = getString(R.string.magic_packet_group, group);
+                        Toast.makeText(getApplicationContext(), magicPacket, Toast.LENGTH_LONG).show();
                     }
                 }
             }
@@ -167,7 +171,7 @@ public class MainActivity extends BaseActivity {
         // Pass null as the parent view because its going in the dialog layout
         builder.setView(inflater.inflate(R.layout.dialog_hosts, null))
                 // Add action buttons
-                .setPositiveButton("UPDATE", new DialogInterface.OnClickListener() {
+                .setPositiveButton(getResources().getString(R.string.update), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         String hostname = editTextHostname.getText().toString();
@@ -181,12 +185,12 @@ public class MainActivity extends BaseActivity {
                         getEntriesFromDb();
                     }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getResources().getString(R.string.cancel), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dialog.dismiss();
                     }
                 })
-                .setNeutralButton("Delete", new DialogInterface.OnClickListener() {
+                .setNeutralButton(getResources().getString(R.string.delete), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String hostname = editTextHostname.getText().toString();
@@ -261,7 +265,7 @@ public class MainActivity extends BaseActivity {
             entryAdapter.addAll(listEntryPoj);
         } catch (Exception e) {
             e.printStackTrace();
-            Toast.makeText(this, "The specified file was not found", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.server_file), Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -13,7 +13,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="How to start all server"/>
+        android:text="@string/how_to_start_all_server"/>
     <RadioGroup
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -22,14 +22,14 @@
         android:id="@+id/radioButtonStartAllFromHostname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start all server individually"
+        android:text="@string/start_all_server_individually"
         android:checked="false"  />
 
     <RadioButton
         android:id="@+id/radioButtonStartAllFromGroupname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start all server by group name"
+        android:text="@string/start_all_server_by_group_name"
         android:checked="false"  />
     </RadioGroup>
 
@@ -43,7 +43,7 @@
         android:id="@+id/port"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Port" />
+        android:text="@string/port" />
 
     <EditText
         android:id="@+id/editTextPort"
@@ -62,7 +62,7 @@
         android:id="@+id/textViewImportCSVFile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Import Filename" />
+        android:text="@string/import_filename" />
 
     <EditText
         android:id="@+id/editTextImportCSVFile"
@@ -70,25 +70,25 @@
         android:layout_height="wrap_content"
         android:ems="1"
         android:inputType="text"
-        android:hint="Filename" />
+        android:hint="@string/filename" />
 
     <TextView
         android:id="@+id/textViewLoadFromCsv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Check if load from Csv file" />
+        android:text="@string/check_if_load_from_csv_file" />
 
     <CheckBox
         android:id="@+id/checkBoxLoadFromCsv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Load from Csv?" />
+        android:hint="@string/load_from_csv" />
 
     <TextView
         android:id="@+id/textViewSendArpXTimes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="How often to send ARP request" />
+        android:text="@string/how_often_to_send_arp_request" />
 
     <EditText
         android:id="@+id/editTextSendArpRequest"
@@ -102,20 +102,20 @@
         android:id="@+id/buttonSave"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Save"
+        android:text="@string/save"
         android:onClick="save"/>
 
     <TextView
         android:id="@+id/textViewDelete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Delete all entries from database" />
+        android:text="@string/delete_all_entries_from_database" />
 
     <Button
         android:id="@+id/buttonDelete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Delete all entries"
+        android:text="@string/delete_all_entries"
         android:onClick="delete"/>
 
 </LinearLayout>
