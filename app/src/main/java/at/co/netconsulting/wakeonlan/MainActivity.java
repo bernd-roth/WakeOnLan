@@ -39,6 +39,8 @@ public class MainActivity extends BaseActivity {
     private static final int ACCESS_NETWORK_STATE = 103;
     private static final int INTERNET = 104;
     private static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
+    private int permissionWriteExternalStorage, permissionReadExternalStorage,
+            permissionAccessWifiState, permissionAccessNetworkState, permissionInternet;
 
     private DBHelper dbHelper;
 //    private ImageView imageView;
@@ -161,7 +163,7 @@ public class MainActivity extends BaseActivity {
                     || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_WIFI_STATE)
                     || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_NETWORK_STATE)
                     || ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.INTERNET)) {
-                showDialogOK("All of the requested permissions are required for this app",
+                showDialogOK(R.string.go_to_settings,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -178,13 +180,13 @@ public class MainActivity extends BaseActivity {
             } else {
                 //permission is denied (and never ask again is checked)
                 //shouldShowRequestPermissionRationale will return false
-                Toast.makeText(this, "Go to settings and enable permissions", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.go_to_settings, Toast.LENGTH_LONG).show();
                 finish();
             }
         }
     }
 
-    private void showDialogOK(String message, DialogInterface.OnClickListener okListener) {
+    private void showDialogOK(int message, DialogInterface.OnClickListener okListener) {
         new AlertDialog.Builder(this)
                 .setMessage(message)
                 .setPositiveButton("OK", okListener)
@@ -336,11 +338,11 @@ public class MainActivity extends BaseActivity {
     }
 
     private boolean checkAndRequestPermissions() {
-        int permissionWriteExternalStorage = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        int permissionReadExternalStorage = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
-        int permissionAccessWifiState = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_WIFI_STATE);
-        int permissionAccessNetworkState = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE);
-        int permissionInternet = ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET);
+        permissionWriteExternalStorage = ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        permissionReadExternalStorage = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        permissionAccessWifiState = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_WIFI_STATE);
+        permissionAccessNetworkState = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE);
+        permissionInternet = ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET);
 
         List<String> listPermissionsNeeded = new ArrayList<>();
         if (permissionWriteExternalStorage != PackageManager.PERMISSION_GRANTED) {

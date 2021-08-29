@@ -7,8 +7,6 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="action_main">Main</string>
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="action_manual_input">Manual Input</string>
@@ -17,6 +15,7 @@
     <string name="magic_packet_host">Magic packet to host %1$s was sent</string>
     <string name="magic_packet_group">Magic packet to group %1$s was sent</string>
     <string name="server_file">The specified file was not found</string>
+    <string name="go_to_settings">Go to settings and enable permissions</string>
 
     <!--Labels-->
     <string name="update">UPDATE</string>
@@ -42,4 +41,7 @@
     <!--RadioButton-->
     <string name="start_all_server_individually">Start all server individually</string>
     <string name="start_all_server_by_group_name">Start all server by group name</string>
+
+    <!--Message-->
+    <string name="all_requested_permissions">All of the requested permissions are required for this app</string>
 </resources>
