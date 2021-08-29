@@ -131,6 +131,8 @@ public class SettingsActivity extends BaseActivity {
         editTextArpRequest = (EditText) findViewById(R.id.editTextSendArpRequest);
 
         checkBoxLoadFromCsv = findViewById(R.id.checkBoxLoadFromCsv);
+
+        dbHelper = new DBHelper(getApplicationContext());
     }
 
     public void save(View view) {
