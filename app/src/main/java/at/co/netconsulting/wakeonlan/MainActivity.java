@@ -172,7 +172,8 @@ public class MainActivity extends BaseActivity {
                                         checkAndRequestPermissions();
                                         break;
                                     case DialogInterface.BUTTON_NEGATIVE:
-                                        // proceed with logic by disabling the related features or quit the app.
+                                        Toast.makeText(getApplicationContext(), R.string.go_to_settings, Toast.LENGTH_LONG).show();
+                                        finish();
                                         break;
                                 }
                             }
