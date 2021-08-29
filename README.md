@@ -21,3 +21,4 @@ Description: WakeOnLan enables you to wake up all servers/clients in the same su
     immediately
 6.  Choose whether to import server/clients from CSV or Database
 7.  Groups of server and/or clients can be woke up either from an imported Csv or from the database content
+8. Exporting database/table entries to csv file
