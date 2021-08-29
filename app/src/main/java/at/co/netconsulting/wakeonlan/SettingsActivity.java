@@ -2,6 +2,8 @@ package at.co.netconsulting.wakeonlan;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -10,25 +12,33 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import androidx.appcompat.widget.Toolbar;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.security.Timestamp;
+import java.sql.Date;
+import java.text.DateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
 import at.co.netconsulting.wakeonlan.database.DBHelper;
 import at.co.netconsulting.wakeonlan.general.BaseActivity;
 import at.co.netconsulting.wakeonlan.general.SharedPreferenceModel;
+import at.co.netconsulting.wakeonlan.general.StaticFields;
+import at.co.netconsulting.wakeonlan.poj.EntryPoj;
 
 public class SettingsActivity extends BaseActivity {
-    private int radioButtonEvaluation, port;
-    private SharedPreferences sharedPreferences;
-    private SharedPreferences.Editor sharedEditor;
     private RadioGroup radioGroup;
     private RadioButton radioButton;
     private Button buttonSave;
     private EditText editTextPort, editTextArpRequest, editTextImportCSV;
     private Toolbar toolbar;
-    private String csvFileName;
     private CheckBox checkBoxLoadFromCsv;
     private SharedPreferenceModel prefs = new SharedPreferenceModel(SettingsActivity.this);
     private boolean isCheckBox;
     private final String RADIO_BUTTON_GROUP = "Server_Or_Group";
     private DBHelper dbHelper;
+    private String dateTimeFormat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,5 +162,32 @@ public class SettingsActivity extends BaseActivity {
 
     public void showMenu(MenuItem item) {
         onOptionsItemSelected(item);
+    }
+
+    public void export(View view) {
+        dbHelper = new DBHelper(getApplicationContext());
+        List<EntryPoj> allEntries = dbHelper.exportAllEntries();
+
+        dateTimeFormat = DateTimeFormatter.ofPattern("dd-MM-yyyy_HH-mm-ss").format(LocalDateTime.now());
+
+        File backupFile = new File(Environment.getExternalStorageDirectory() + "/" + "export_server.csv." + dateTimeFormat);
+        StringBuilder stringbuilder = new StringBuilder();
+
+        try (PrintWriter writer = new PrintWriter(backupFile)) {
+            for(int i = 0; i<allEntries.size(); i++) {
+                stringbuilder.append(allEntries.get(i).getId()+";");
+                stringbuilder.append(allEntries.get(i).getHostname()+";");
+                stringbuilder.append(allEntries.get(i).getGroup_name()+";");
+                stringbuilder.append(allEntries.get(i).getIp_address()+";");
+                stringbuilder.append(allEntries.get(i).getBroadcast()+";");
+                stringbuilder.append(allEntries.get(i).getNic_mac()+";");
+                stringbuilder.append(allEntries.get(i).getComment());
+                stringbuilder.append("\n");
+            }
+            writer.write(stringbuilder.toString());
+            writer.close();
+        } catch (FileNotFoundException exception) {
+            Log.e(StaticFields.ERROR_TAG, "Could not find file!");
+        }
     }
 }

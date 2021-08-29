@@ -22,7 +22,7 @@
     <string name="cancel">CANCEL</string>
     <string name="delete">DELETE</string>
 
-    <!--text view-->
+    <!--textview-->
     <string name="how_to_start_all_server">How to start all server</string>
     <string name="import_filename">Import Csv</string>
     <string name="check_if_load_from_csv_file">Check if load from Csv file</string>
@@ -30,6 +30,8 @@
     <string name="how_often_to_send_arp_request">How often to send ARP request</string>
     <string name="delete_all_entries_from_database">Delete all entries from database</string>
     <string name="delete_all_entries">Delete all entries</string>
+    <string name="export_all_entries_from_database">Export all entries from database</string>
+    <string name="export_all_entries">Export all entries</string>
 
     <!--hint-->
     <string name="filename">Filename</string>

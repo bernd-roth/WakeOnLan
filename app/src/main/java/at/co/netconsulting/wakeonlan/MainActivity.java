@@ -30,18 +30,15 @@ import java.util.List;
 import at.co.netconsulting.wakeonlan.database.DBHelper;
 import at.co.netconsulting.wakeonlan.general.BaseActivity;
 import at.co.netconsulting.wakeonlan.general.SharedPreferenceModel;
+import at.co.netconsulting.wakeonlan.general.StaticFields;
 import at.co.netconsulting.wakeonlan.poj.EntryPoj;
 
 public class MainActivity extends BaseActivity {
-    private static final int WRITE_EXTERNAL_STORAGE = 100;
-    private static final int READ_EXTERNAL_STORAGE = 101;
-    private static final int ACCESS_WIFI_STATE = 102;
-    private static final int ACCESS_NETWORK_STATE = 103;
-    private static final int INTERNET = 104;
-    private static final int REQUEST_ID_MULTIPLE_PERMISSIONS = 1;
-    private int permissionWriteExternalStorage, permissionReadExternalStorage,
-            permissionAccessWifiState, permissionAccessNetworkState, permissionInternet;
-
+    private int permissionWriteExternalStorage,
+                permissionReadExternalStorage,
+                permissionAccessWifiState,
+                permissionAccessNetworkState,
+            permissionInternet;
     private DBHelper dbHelper;
 //    private ImageView imageView;
     private Toolbar toolbar;
@@ -49,7 +46,6 @@ public class MainActivity extends BaseActivity {
     private ListView entryListView;
     private EntryAdapter entryAdapter;
     private SharedPreferences sharedPreferences;
-    private Button delete;
     private String magicPacket;
 
     @Override
@@ -362,7 +358,7 @@ public class MainActivity extends BaseActivity {
             listPermissionsNeeded.add(Manifest.permission.INTERNET);
         }
         if (!listPermissionsNeeded.isEmpty()) {
-            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]),REQUEST_ID_MULTIPLE_PERMISSIONS);
+            ActivityCompat.requestPermissions(this, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), StaticFields.REQUEST_ID_MULTIPLE_PERMISSIONS);
             return false;
         }
         return true;

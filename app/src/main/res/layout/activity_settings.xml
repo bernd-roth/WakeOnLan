@@ -106,6 +106,19 @@
         android:onClick="save"/>
 
     <TextView
+        android:id="@+id/textViewExport"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/export_all_entries_from_database" />
+
+    <Button
+        android:id="@+id/buttonExport"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/export_all_entries"
+        android:onClick="export"/>
+
+    <TextView
         android:id="@+id/textViewDelete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
