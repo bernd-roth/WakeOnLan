@@ -186,7 +186,7 @@ public class SettingsActivity extends BaseActivity {
             }
             writer.write(stringbuilder.toString());
         } catch (FileNotFoundException exception) {
-            Log.e(StaticFields.ERROR_TAG, "Could not find file!");
+            Log.e(StaticFields.ERROR_TAG, String.valueOf(R.string.file_not_found_exception));
         }
     }
 }

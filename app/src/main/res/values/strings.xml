@@ -46,4 +46,7 @@
 
     <!--Message-->
     <string name="all_requested_permissions">All of the requested permissions are required for this app</string>
+
+    <!--Log.e-->
+    <string name="file_not_found_exception">Could not find file!</string>
 </resources>
