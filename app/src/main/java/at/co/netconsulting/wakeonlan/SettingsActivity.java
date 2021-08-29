@@ -11,15 +11,16 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Toast;
 import androidx.appcompat.widget.Toolbar;
+import com.opencsv.CSVReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.PrintWriter;
-import java.security.Timestamp;
-import java.sql.Date;
-import java.text.DateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import at.co.netconsulting.wakeonlan.database.DBHelper;
 import at.co.netconsulting.wakeonlan.general.BaseActivity;
@@ -39,6 +40,7 @@ public class SettingsActivity extends BaseActivity {
     private final String RADIO_BUTTON_GROUP = "Server_Or_Group";
     private DBHelper dbHelper;
     private String dateTimeFormat;
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -187,6 +189,34 @@ public class SettingsActivity extends BaseActivity {
             writer.write(stringbuilder.toString());
         } catch (FileNotFoundException exception) {
             Log.e(StaticFields.ERROR_TAG, String.valueOf(R.string.file_not_found_exception));
+        }
+    }
+
+    public void importFromFileToTable(View view) {
+        try {
+            sharedPreferences = getSharedPreferences("PREFS_FILENAME", 0);
+            String csvFileName = sharedPreferences.getString("PREFS_FILENAME", "/server_client.txt");
+
+            String hostname = null, groupName, ip, broadcast, mac, comment;
+            List<EntryPoj> listEntryPoj = new ArrayList<EntryPoj>();
+            File csvfile = new File(Environment.getExternalStorageDirectory() + "/" + csvFileName);
+            CSVReader reader = new CSVReader(new FileReader(csvfile.getAbsolutePath()));
+            String[] nextLine;
+            int id = 1;
+            while ((nextLine = reader.readNext()) != null) {
+                String[] splitLine = nextLine[0].split(";");
+                hostname = splitLine[0];
+                groupName = splitLine[1];
+                ip = splitLine[2];
+                broadcast = splitLine[3];
+                mac = splitLine[4];
+                comment = splitLine[5];
+                dbHelper.insertWifi(hostname, groupName, ip, broadcast, mac, comment);
+                id++;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, getString(R.string.server_file), Toast.LENGTH_SHORT).show();
         }
     }
 }

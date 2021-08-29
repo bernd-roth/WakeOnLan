@@ -106,6 +106,19 @@
         android:onClick="save"/>
 
     <TextView
+        android:id="@+id/textViewImport"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/import_all_entries_from_file" />
+
+    <Button
+        android:id="@+id/buttonImport"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/import_all_entries"
+        android:onClick="importFromFileToTable"/>
+
+    <TextView
         android:id="@+id/textViewExport"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -32,6 +32,7 @@
     <string name="delete_all_entries">Delete all entries</string>
     <string name="export_all_entries_from_database">Export all entries from database</string>
     <string name="export_all_entries">Export all entries</string>
+    <string name="import_all_entries_from_file">Import all entries from file</string>
 
     <!--hint-->
     <string name="filename">Filename</string>
@@ -39,6 +40,7 @@
 
     <!--Button-->
     <string name="save">Save</string>
+    <string name="import_all_entries">Import all entries</string>
 
     <!--RadioButton-->
     <string name="start_all_server_individually">Start all server individually</string>
