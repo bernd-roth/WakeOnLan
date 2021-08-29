@@ -4,6 +4,16 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
     <EditText
+        android:id="@+id/id"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_marginBottom="4dp"
+        android:inputType="none"
+        android:hint="id" />
+    <EditText
         android:id="@+id/hostname"
         android:inputType="text"
         android:layout_width="match_parent"

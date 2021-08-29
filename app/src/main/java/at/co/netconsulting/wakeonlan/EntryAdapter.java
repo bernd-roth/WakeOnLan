@@ -31,6 +31,7 @@ public final class EntryAdapter extends ArrayAdapter<EntryPoj> {
 		final EntryPoj entry = getItem(position);
 		
 		// Setting the title view is straightforward
+		viewHolder.id.setText(String.valueOf(entry.getId()));
 		viewHolder.hostname.setText(entry.getHostname());
 		viewHolder.groupname.setText(entry.getGroup_name());
 		viewHolder.ipAddress.setText(entry.getIp_address());
@@ -78,7 +79,8 @@ public final class EntryAdapter extends ArrayAdapter<EntryPoj> {
 		
 		if(null == tag || !(tag instanceof ViewHolder)) {
 			viewHolder = new ViewHolder();
-			
+
+			viewHolder.id = (TextView) workingView.findViewById(R.id.id);
 			viewHolder.hostname = (TextView) workingView.findViewById(R.id.hostname);
 			viewHolder.groupname = (TextView) workingView.findViewById(R.id.groupname);
 			//viewHolder.imageView = (ImageView) workingView.findViewById(R.id.news_entry_icon);
@@ -101,6 +103,7 @@ public final class EntryAdapter extends ArrayAdapter<EntryPoj> {
 	 * Since views are recycled, these references will never change
 	 */
 	private static class ViewHolder {
+		public TextView id;
 		public TextView hostname;
 		public TextView groupname;
 		//public ImageView imageView;

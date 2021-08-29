@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 public final class EntryPoj {
 	//private final ImageView imageView;
+	private final int id;
 	private final String hostname;
 	private final String group_name;
 	private final String ip_address;
