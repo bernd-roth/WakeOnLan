@@ -8,9 +8,13 @@ Description: WakeOnLan enables you to wake up all servers/clients in the same su
 2. Wake up a defined group of servers and/or clients
 3. Define a point in time, when servers/clients should be woken up
 
-## Settings
+## Main screen
 
-<img src="app/images/settings.png" width="100" height="10">
+<img src="app/images/main.png" width="100" height="100">
+
+## Settings screen
+
+<img src="app/images/settings.png" width="100" height="100">
 
 ## How to handle the app
 
