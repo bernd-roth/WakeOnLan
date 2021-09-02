@@ -10,7 +10,7 @@ Description: WakeOnLan enables you to wake up all servers/clients in the same su
 
 ## Settings
 
-![](images/settings.png)
+![](app/images/settings.png)
 
 ## How to handle the app
 
